@@ -90,7 +90,7 @@ public class PartnerAdController {
 	 */
 	@RequestMapping(value = "/ad/{partnerAdId}", method = RequestMethod.PUT)
 	public ResponseEntity<PartnerAd> updatePartnerAd(@PathVariable(value="partnerAdId") String partnerAdId, @RequestBody PartnerAd partnerAd) {
-		LOGGER.info("/ad/" + partnerAdId + "  api UPDATE request called...");
+		LOGGER.info("/ad/" + partnerAdId + " api UPDATE request called...");
 		PartnerAd updatedPartnerAd = partnerAdService.update(partnerAdId, partnerAd);
 		if (updatedPartnerAd == null) {
 			LOGGER.debug("Ad Campaing with id " + partnerAdId + " does not exists");
