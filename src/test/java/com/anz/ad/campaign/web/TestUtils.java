@@ -19,15 +19,31 @@ public class TestUtils {
 		return jsonList;
 	}
 
-	public static String objectToJson(Object obj) throws JsonProcessingException {
+	public static String objectToJson(Object obj) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.writeValueAsString(obj);
+		String jsonStr = "";
+		try {
+			jsonStr = objectMapper.writeValueAsString(obj);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return jsonStr;
 	}
 
-	public static <T> T jsonToObject(String json, Class<T> classOf)
-			throws JsonParseException, JsonMappingException, IOException {
+	@SuppressWarnings("unchecked")
+	public static <T> T jsonToObject(String json, Class<T> classOf) {
 		ObjectMapper objectMapper = new ObjectMapper();
-		return objectMapper.readValue(json, classOf);
+		Object obj = null;
+		try {
+			obj = objectMapper.readValue(json, classOf);
+		} catch (JsonParseException e) {
+			//e.printStackTrace();
+		} catch (JsonMappingException e) {
+			//e.printStackTrace();
+		} catch (IOException e) {
+			//e.printStackTrace();
+		}
+		return (T) obj;
 	}
 	
 	

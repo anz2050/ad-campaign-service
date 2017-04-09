@@ -1,8 +1,8 @@
 package com.anz.ad.campaign.exception;
 
 public class AdCampaignNotFoundException extends RuntimeException {
-
-	private static final long serialVersionUID = 1L;
+	
+private static final long serialVersionUID = 1L;
 	
 	private String id;
 
@@ -14,4 +14,5 @@ public class AdCampaignNotFoundException extends RuntimeException {
 	public String getId() {
         return id;
     }
+
 }

@@ -1,12 +1,18 @@
 package com.anz.ad.campaign.web;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,12 +22,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.anz.ad.campaign.domain.PartnerAd;
 import com.anz.ad.campaign.service.PartnerAdService;
-import com.anz.ad.campaign.web.PartnerAdController;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 
 @RunWith(SpringRunner.class)
@@ -34,7 +38,8 @@ public class PartnerAdControllerTest {
 	@MockBean
 	PartnerAdService partnerAdService;
 	
-	private final String URL = "/ad";
+	private static final String ROOT_URL = "/";
+	private static final String URL = "/ad";
 
 	@Test
 	public void testCreatePartnerAd() throws Exception {
@@ -62,5 +67,97 @@ public class PartnerAdControllerTest {
 		
 		
 	}
+	
+	
+	@Test
+	public void testGetPartnerAd() throws Exception {
+
+		// prepare data and mock's behavior
+		PartnerAd partnerAdStub = new PartnerAd("Braun", 60, LocalDateTime.now(), "Series 7 - Smart Shaver");
+		when(partnerAdService.getPartnerAdById(any(String.class))).thenReturn(partnerAdStub);
+
+		// execute
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get(URL + "/{id}", new String("Braun"))
+						.accept(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		// verify
+		int status = result.getResponse().getStatus();
+		assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
+
+		// verify that service method was called once
+		verify(partnerAdService).getPartnerAdById(any(String.class));
+
+		PartnerAd partnerAdResult = TestUtils.jsonToObject(result.getResponse().getContentAsString(), PartnerAd.class);
+		assertNotNull(partnerAdResult);
+		assertEquals("Braun", partnerAdResult.getPartnerId());
+	}
+	
+	
+	@Test
+	public void testGetPartnerAdNotExist() throws Exception {
+
+		// prepare data and mock's behavior
+		// Mocking data not Required as PartnerAd does Not Exist scenario
+
+		// execute
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get(URL + "/{id}", new String("abc"))
+						.accept(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		// verify
+		int status = result.getResponse().getStatus();
+		assertEquals("Incorrect Response Status", HttpStatus.NOT_FOUND.value(), status);
+
+		// verify that service method was called once
+		verify(partnerAdService).getPartnerAdById(any(String.class));
+
+		PartnerAd partnerAdResult = TestUtils.jsonToObject(result.getResponse().getContentAsString(), PartnerAd.class);
+		assertNull(partnerAdResult);
+	}
+	
+	@Test
+	public void testGetAllPartnerAd() throws Exception {
+
+		// prepare data and mock's behavior
+		List<PartnerAd> partnerAdList = createDummyPartnerAds();
+		when(partnerAdService.getAllPartnerAd()).thenReturn(partnerAdList);
+
+		// execute
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.get(ROOT_URL)
+					.accept(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		// verify
+		int status = result.getResponse().getStatus();
+		assertEquals("Incorrect Response Status", HttpStatus.OK.value(), status);
+
+		// verify that service method was called once
+		verify(partnerAdService).getAllPartnerAd();
+
+		// get the List<PartnerAd> from the JSON response
+		TypeReference<List<PartnerAd>> typeRef = new TypeReference<List<PartnerAd>>() {
+		};
+		@SuppressWarnings("unchecked")
+		List<PartnerAd> partnerAdListResult = TestUtils.jsonToList(result.getResponse().getContentAsString(), typeRef);
+
+		assertNotNull("PartnerAd not found", partnerAdListResult);
+		assertEquals("PartnerAd list size is not matching", partnerAdList.size(), partnerAdListResult.size());
+
+	}
+	
+	
+	
+	private List<PartnerAd> createDummyPartnerAds() {
+		PartnerAd partnerAd1 = new PartnerAd("Kirkland", 120, LocalDateTime.now(), "UltraClean - Odor Eliminating Technology");
+		PartnerAd partnerAd2 = new PartnerAd("P&G", 190, LocalDateTime.now(), "Crest ProHealth - 99% Germ Killer");
+		PartnerAd partnerAd3 = new PartnerAd("Amazon", 80, LocalDateTime.now(), "Simple Storage Service - deliver 99.999999999% durability");
+		List<PartnerAd> partnerAdList = Arrays.asList(partnerAd1, partnerAd2, partnerAd3);
+		return partnerAdList;
+	}
+	
 
 }
