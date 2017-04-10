@@ -20,14 +20,14 @@ Ad Campaign RESTful Service - simple HTTP-based ad server
 
 * **Build:**
 ```
-  $> cd `project-folder`
+  $> cd ad-campaign-service
   
   $> mvn clean package
 ```  
 
 * **Run Application:**
 ```
-  $> java -jar target/<jar-file-name.jar>
+  $> java -jar target/ad-campaign-service-0.0.1-SNAPSHOT.jar
 ```
 
   Use any REST client (e.g. Chrome Postman, Mozilla RestClient, SOAPUI) to test the service
