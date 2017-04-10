@@ -7,9 +7,9 @@ Ad Campaign RESTful Service - simple HTTP-based ad server
   - Java 1.8
   - Apache Maven
   - Spring Boot RESTful API
-  - Spring Boot Starter Data JPA
+  - Spring Data JPA
   - In-memory database (H2)
-  - jUnit and Mockito (unit testing)
+  - jUnit, Mockito and Spring MockMvc (unit testing)
 
 ## Download, Build & Run this Application
 
