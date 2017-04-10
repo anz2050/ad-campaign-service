@@ -5,6 +5,7 @@ Ad Campaign RESTful Service - simple HTTP-based ad server
 
   - Spring Boot in-built Tomcat Server
   - Java 1.8
+  - Apache Maven
   - Spring Boot RESTful API
   - Spring Boot Starter Data JPA
   - In-memory database (H2)
@@ -38,12 +39,20 @@ Ad Campaign RESTful Service - simple HTTP-based ad server
 
 ```
 {
-"partner_id": "unique_string_representing_partner',
+"partnerId": "unique_string_representing_partner',
 "duration": "int_representing_campaign_duration_in_seconds_from_now"
-"ad_content": "string_of_content_to_display_as_ad"
+"adContent": "string_of_content_to_display_as_ad"
 }
 ```
 
+e.g.
+```
+{
+  "partnerId": "Apple",
+  "duration": 70,
+  "adContent": "iPhone 7 plus - Best Technology"
+}
+```
 
     The server should enforce the following invariant upon receiving a request to create a new campaign
 

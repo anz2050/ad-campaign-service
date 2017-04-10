@@ -107,7 +107,7 @@ public class PartnerAdController {
 	 * @return
 	 */
 	@RequestMapping(value = "/ad/{partnerAdId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> deletePartnerAd(@PathVariable("partnerAdId") String partnerAdId) {
+	public ResponseEntity<Void> deletePartnerAd(@PathVariable(value="partnerAdId") String partnerAdId) {
 		LOGGER.info("/ad/" + partnerAdId + " api DELETE request called...");
 		if(partnerAdService.delete(partnerAdId)) {
 			LOGGER.info("Ad Campaign with id " + partnerAdId + " deleted...");
